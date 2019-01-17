@@ -1,0 +1,52 @@
+{% load staticfiles %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- <link  rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+ 
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
+                <img src="https://img.icons8.com/ios/50/ffffff/menu-filled.png" width="26">
+            </button>
+
+            <div class="collapse navbar-collapse navHeaderCollapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="/">Caixa</a></li>
+                    <li><a href="{% url 'produtos' %}">Produtos</a></li>
+                    <li><a href="#">menu</a></li>
+                    <li><a href="#">Perfil</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- <footer class="container-fluid">
+        <p>Tecbeet &copy; 2019</p>
+    </footer> -->
+    
+</body>
+
+
+</html>

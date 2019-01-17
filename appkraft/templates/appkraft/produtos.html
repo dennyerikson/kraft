@@ -1,0 +1,51 @@
+{% extends 'appkraft/base.html' %}
+
+{% block content %}
+
+    <div class="container">
+            <h2>Tabela de Produtos</h2>
+            <p>Digite alguma coisa no campo de entrada para procurar na tabela nomes etc...:</p>  
+            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+            <br>
+            <table class="table table-bordered table-striped">
+              <thead><!--cabeçalho-->
+                <tr>
+                  <th>Produto</th>
+                  <th>Marca</th>
+                  <th>Descricao</th>
+                  <th>Valor</th>
+                  <th>Estoque</th>
+                </tr>
+              </thead>
+
+              <tbody id="myTable"><!--corpo_tabela-->
+               
+                {% for produto in produtos %}
+                    <tr><!--linha-->
+                        <td>{{ produto.nome }}</td><!--coluna-->
+                        <td>{{ produto.marca }}</td><!--coluna-->
+                        <td>{{ produto.descricao }}</td><!--coluna-->
+                        <td>{{ produto.valor }}</td><!--coluna-->
+                        <td>{{ produto.estoque_atual }}</td><!--coluna-->
+                    </tr>
+                    
+                {% endfor %}
+               
+              </tbody>
+            </table>
+            
+            
+          </div>
+          
+          <script>
+          $(document).ready(function(){
+            $("#myInput").on("keyup", function() {
+              var value = $(this).val().toLowerCase();
+              $("#myTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              });
+            });
+          });
+          </script>
+
+{% endblock %}
