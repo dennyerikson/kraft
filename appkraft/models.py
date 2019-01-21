@@ -16,8 +16,9 @@ class Produtos(models.Model):
         default=timezone.now, blank=True, null=True
     )
     #campo imagem
+    foto = models.ImageField(upload_to='appkraft', null=True, blank=True)
     #campo validade
 
-    
+
     def __str__(self):
         return self.nome
