@@ -1,0 +1,98 @@
+{% extends 'appkraft/base.html' %}
+
+{% block content %}
+
+    <div class="header">
+        <div class="container">
+            <h1>Caixa</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <label for="perfil">Perfil</label>
+        <br>
+        <select id="perfil">
+            <option value="">----</option>
+            <option value="volvo">Local</option>
+            <option value="saab">Anhanguera</option>
+        </select>
+        <br>
+        <label for="lista">Lista</label>
+        <br>
+        <select id="lista">            
+            <option value="">----</option>
+            <option value="volvo">Saad</option>
+            <option value="saab">Anhanguera</option>
+        </select>
+
+        <form action="" class="input-group" method="GET">
+            <div class="input-group">
+                    <input name="vnd" type="text" class="form-inline" value="{% if venda  %} {{venda}} {% endif%}">
+                    <input name="qnt" type="text" class="form-inline" placeholder="Qnt.">
+                    <input name="search" type="text" class="form-inline" placeholder="Search Produto.." autofocus>
+                    
+                    <button type="submit">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+
+            </div>
+        </form>
+    </div>
+
+    <div class="container">
+        <button>Orçamento</button>
+        <button>Finalizar</button>
+    </div>
+
+    <div class="container">
+        <label for="total">Total</label>
+        <br>
+        <textarea name="total" id="total" cols="1" rows="1" width="100"></textarea>
+    </div>
+
+    <div class="container">
+        <div class="radio">
+            <label><input type="radio" name="optradio" checked>Dinheiro</label>
+        </div>
+
+        <div class="radio">
+            <label><input type="radio" name="optradio">Card Crédito</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="optradio">Card Débito</label>
+        </div>
+    </div>
+
+    <div class="container"> 
+            <!-- <input class="form-control" id="myInput" type="text" placeholder="Search Produto.."> -->
+            <br>
+            <table class="table table-bordered table-striped">
+              <thead><!--cabeçalho-->
+                <tr>
+                  <th>Pedido</th>
+                  <th>Código</th>
+                  <th>nome</th>
+                  <th>Qtde</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+
+              <tbody id="myTable"><!--corpo_tabela-->
+               
+                {% for produto in lista %}
+                    <tr><!--linha-->
+                        <td>{{produto.codigo_compra}}</td><!--coluna-->
+                        <td>{{produto.codigo_produto}}</td><!--coluna-->
+                        <td>{{produto.nome}}</td><!--coluna-->
+                        <td>{{produto.quantidade}}</td><!--coluna-->
+                        <td>{{produto.valor}}</td><!--coluna-->
+                    </tr>                    
+                {% endfor %}
+               
+              </tbody>
+            </table>
+            
+            
+        </div>
+
+{% endblock %}
