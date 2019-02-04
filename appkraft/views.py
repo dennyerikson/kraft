@@ -177,3 +177,8 @@ class ProdutosDeleteView(DeleteView):
     
     def get_success_url(self):
         return reverse('appkraft:appkraft-list')
+
+
+
+# deploy pip3.6 install --user pythonanywhere
+# deploy pa_autoconfigure_django.py https://github.com/dennyerikson/kraft.git
