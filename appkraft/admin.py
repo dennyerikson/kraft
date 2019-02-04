@@ -5,3 +5,7 @@ from .models import *
 admin.site.register(Produtos)
 admin.site.register(Compras)
 admin.site.register(Compra_Id)
+
+class ComprasManager(admin.ModelAdmin):
+    list_diplay = ('codogo_compra','valor_total',)
+

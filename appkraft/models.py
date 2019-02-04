@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+
+
 # Create your models here.
 class Produtos(models.Model):
     codigo_produto = models.IntegerField(unique=True)
@@ -23,6 +25,8 @@ class Produtos(models.Model):
     def __str__(self):
         return self.nome
 
+
+
 class Compra_Id(models.Model):
     STATUS = [
         ('Andamento','Andamento'),
@@ -36,6 +40,19 @@ class Compra_Id(models.Model):
     )
     def __str__(self):
         return str(self.pk)
+
+
+
+class ComprasManager(models.Manager):
+    def get_query_set(self):
+        query_set = super(ComprasManager, self).get_query_set()
+
+        return query_set.extra(
+            select = {
+                '_valor_total':"""select sum(valor) from appkraft_compras
+                where appkraft_compras.codigo_compra=1""",
+            }
+        )
 
 class Compras(models.Model):
     codigo_compra = models.ForeignKey(Compra_Id, on_delete=models.CASCADE)
@@ -52,4 +69,7 @@ class Compras(models.Model):
 
     def get_absolute_url(self):
         return '/%s/' % self.id
+
+    def valor_total(self):
+        return self._valor_total
 

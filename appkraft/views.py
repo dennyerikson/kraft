@@ -40,18 +40,20 @@ def home(request):
         venda = request.GET.get('vnd')
             # get id produto
         if search:
-            venda = int(venda)
+            # venda = int(venda)
+            venda = 1
             # try:
             vendas = Compra_Id.objects.get(pk=venda, status='Andamento')
+            print(vendas)
             if vendas:
                 produtos = Produtos.objects.filter(
                     Q(codigo_produto=search) |
                     Q(codigo_barras=search)
                 )
                 
-                for p in produtos:
-                    quantidade = int(quantidade)
+                for p in produtos:                    
                     if quantidade:
+                        quantidade = int(quantidade)
                         p.valor *= quantidade
                     else:
                         quantidade = 1
