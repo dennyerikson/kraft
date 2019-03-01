@@ -9,6 +9,9 @@ class ProdutosModelForm(forms.ModelForm):
             'codigo_barras',
             'nome',
             'descricao',
+            'empresa',
+            'custo',
+            'ganho',
             'valor',
             'marca',
             'estoque_atual',
@@ -16,3 +19,8 @@ class ProdutosModelForm(forms.ModelForm):
             'observacoes',
             'foto',
         ]
+
+        widgets={
+            'observacoes':forms.Textarea(attrs={'placeholder':'Até 255 caracteres..','rows':3}),
+            'nome':forms.TextInput(attrs={'placeholder':'Nome Produto'}),
+        }

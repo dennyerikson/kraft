@@ -10,7 +10,7 @@ class Perfil(models.Model):
         
     
 class Pessoa(models.Model):
-    perfil = models.ManyToManyField(Perfil)
+    perfil = models.ForeignKey(Perfil, blank=True, on_delete=models.PROTECT)
     codigo = models.IntegerField()
     nome = models.CharField(max_length=150)
     aniversario = models.DateField()
@@ -32,7 +32,6 @@ class Pessoa(models.Model):
     descricao = models.TextField()
 
     def __str__(self):
-        print(self.perfil)
         return '{} - {}'.format(
             self.nome,
             self.perfil
