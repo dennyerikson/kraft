@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Venda, ItemDoPedido
 from django.views import View
 from appkraft.models import Produtos
-from django.db.models import Sum, F, FloatField
+from django.db.models import Sum, F, FloatField, Q
 from .forms import ItemDoPedidoForm
 from django.http import HttpResponseRedirect, QueryDict
 from django.shortcuts import get_object_or_404
@@ -22,17 +22,27 @@ class CaixaView(View):
         # data['venda'] = request.POST['venda_id']
         data['venda'] = request.POST['venda_id']
 
-        if data['venda']:
-            venda = Venda.objects.get(id=int(data['venda']))     
-        elif data['numero']:
-            venda = Venda.objects.get(id=int(data['numero']))       
+
+        if data['venda'] and data['desconto']<=0:
+            print('if')
+            venda = Venda.objects.get(id=int(data['venda'])) 
+
+        elif data['numero'] and data['desconto']>0:
+            print('elif 2')
+            venda = Venda.objects.get(Q(id=int(data['numero'])))
+            venda.desconto = data['desconto']
+            venda.save()      
+
+
         else:
             venda = Venda.objects.create(
                 numero = 0,
                 desconto=data['desconto']
             )
+            venda.numero = venda.id
+            venda.save()
 
-            Venda.objects.filter(id=venda.id).update(numero=venda.id)
+            # Venda.objects.filter(id=venda.id).update(numero=venda.id)
 
         itens = venda.itemdopedido_set.all().annotate(
             total_item=Sum(
@@ -61,20 +71,27 @@ class ItemDoPedidoView(View):
 
         data = {}
 
+
+        # print()
+
         item = ItemDoPedido.objects.filter(
             produto_id=request.POST['produto_id'],
             venda_id=venda
-        )[0]
-
+        ).first()
+    
         if item:         
             qnt = item.quantidade + float(request.POST['quantidade'])
-            ItemDoPedido.objects.filter(
-                id=item.id
-            ).update(quantidade=qnt)
-            
+            # ItemDoPedido.objects.filter(
+            #     id=item.id
+            # ).update(quantidade=qnt) 
+            item = ItemDoPedido.objects.get(id=item.id) 
+            item.quantidade = qnt
+            item.save()
+
+            # item = ItemDoPedido.objects.get(id=item.id)
+            print('if', item.id)
 
 
-            
         else:
             item = ItemDoPedido.objects.create(
                 produto_id=request.POST['produto_id'],
@@ -95,6 +112,9 @@ class ItemDoPedidoView(View):
                 output_field=FloatField()
             )
         ).order_by('-pk')
+
+
+        print('Item:', item.id, ' Venda valor:', data['venda_obj'].valor)
 
 
         if item:

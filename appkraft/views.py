@@ -20,53 +20,53 @@ produto = []
 # Create your views here.
 @login_required
 def home(request):
-    global lista
-    global produto
-    """
-    O Django segue o padrão MVC muito de perto, mas usa uma terminologia ligeiramente dierente. O django é 
-    essencialmente um framework MTV(Model-Template-View). Usa o termo Templates para Views e Views para
-    Controller. Em outras palavras, nas views do Django são chamados templates e controllers e são chamados 
-    views. O código HTML estará em modelos e o código Python etará em Views e Models. 
-    """
-    
-    if request.user.username == "kraft.products":
-        url = 'produtos'
-        return redirect('/{}'.format(url))
-    
-    else:
-        # method GET
-        search = request.GET.get('search')
-        quantidade = request.GET.get('qnt')
-        venda = request.GET.get('vnd')
-            # get id produto
-        if search:
-            # venda = int(venda)
-            venda = 1
-            # try:
-            vendas = Compra_Id.objects.get(pk=venda, status='Andamento')
-            print(vendas)
-            if vendas:
-                produtos = Produtos.objects.filter(
-                    Q(codigo_produto=search) |
-                    Q(codigo_barras=search)
-                )
-                
-                for p in produtos:                    
-                    if quantidade:
-                        quantidade = int(quantidade)
-                        p.valor *= quantidade
-                    else:
-                        quantidade = 1
-
-                    query = Compras.objects.create(
-                        codigo_compra = vendas,
-                        codigo_produto = p.codigo_produto,
-                        nome = p.nome,
-                        valor = p.valor,
-                        quantidade = quantidade,
-                    ).save()
-
-            return redirect('/', {'venda':vendas.pk})
+    # global lista
+    # global produto
+    # """
+    # O Django segue o padrão MVC muito de perto, mas usa uma terminologia ligeiramente dierente. O django é
+    # essencialmente um framework MTV(Model-Template-View). Usa o termo Templates para Views e Views para
+    # Controller. Em outras palavras, nas views do Django são chamados templates e controllers e são chamados
+    # views. O código HTML estará em modelos e o código Python etará em Views e Models.
+    # """
+    #
+    # if request.user.username == "kraft.products":
+    #     url = 'produtos'
+    #     return redirect('/{}'.format(url))
+    #
+    # else:
+    #     # method GET
+    #     search = request.GET.get('search')
+    #     quantidade = request.GET.get('qnt')
+    #     venda = request.GET.get('vnd')
+    #         # get id produto
+    #     if search:
+    #         # venda = int(venda)
+    #         venda = 1
+    #         # try:
+    #         vendas = Compra_Id.objects.get(pk=venda, status='Andamento')
+    #         print(vendas)
+    #         if vendas:
+    #             produtos = Produtos.objects.filter(
+    #                 Q(codigo_produto=search) |
+    #                 Q(codigo_barras=search)
+    #             )
+    #
+    #             for p in produtos:
+    #                 if quantidade:
+    #                     quantidade = int(quantidade)
+    #                     p.valor *= quantidade
+    #                 else:
+    #                     quantidade = 1
+    #
+    #                 query = Compras.objects.create(
+    #                     codigo_compra = vendas,
+    #                     codigo_produto = p.codigo_produto,
+    #                     nome = p.nome,
+    #                     valor = p.valor,
+    #                     quantidade = quantidade,
+    #                 ).save()
+    #
+    #         return redirect('/', {'venda':vendas.pk})
 
         # except:
         #     pass
@@ -104,8 +104,8 @@ def home(request):
         # persistir compra
 
 
-    context = {'lista':compras, 'venda':venda}
-    return render(request, 'appkraft/home.html', context)
+    # context = {'lista':compras, 'venda':venda}
+    return redirect('/caixa')
 
 
 def produto_serializer(item):
