@@ -1,7 +1,7 @@
 from django.db import models
 from accounts.models import Pessoa
 from appkraft.models import Produtos
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 from django.db.models import Sum, F, FloatField
 
@@ -9,7 +9,7 @@ from django.db.models import Sum, F, FloatField
 # Create your models here.
 class Venda(models.Model):
     numero = models.IntegerField()
-    valor = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    valor = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     funcionario = models.ForeignKey(Pessoa, blank=True, null=True, on_delete=models.PROTECT)
     status = models.BooleanField(default=False)
@@ -23,9 +23,14 @@ class Venda(models.Model):
             )
         )['total_pedido'] or 0
 
-        total = total - ((total * float(self.desconto)/100))
+        total = float(total - ((total * float(self.desconto)/100)))
         self.valor = total
-        Venda.objects.filter(id=self.id).update(valor=total)
+        print('model', self.valor)
+        try:
+            Venda.objects.filter(id=self.id).update(valor=self.valor)
+            print('salvou')
+        except:
+            print('pass')
 
         
     def update_estoque(self):
@@ -65,14 +70,22 @@ class ItemDoPedido(models.Model):
 def update_venda_total(sender, instance, **kwargs):
     instance.venda.calcular_total()
 
+@receiver(pre_save, sender=ItemDoPedido)
+def update_venda_total_pre(sender, instance, **kwargs):
+    instance.venda.calcular_total()
 
-@receiver(post_save, sender=Venda)
-def update_venda_total2(sender, instance, **kwargs):
-    instance.calcular_total()
+@receiver(post_delete, sender=ItemDoPedido)
+def update_venda_total_pre(sender, instance, **kwargs):
+    instance.venda.calcular_total()
 
 @receiver(post_save, sender=ItemDoPedido)
 def update_estoque_total(sender, instance, **kwargs):
     instance.venda.update_estoque()
+
+
+@receiver(post_save, sender=Venda)
+def update_venda_total2(sender, instance, **kwargs):
+    instance.calcular_total()
 
 @receiver(post_save, sender=Venda)
 def update_estoque_total2(sender, instance, **kwargs):
