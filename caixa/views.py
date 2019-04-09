@@ -65,7 +65,7 @@ class CaixaView(View):
 
 class ItemDoPedidoView(View):
     def get(self, request, pk):
-        return render(request, 'caixa/home.html')
+        return render(request, '/caixa/home.html')
 
     def post(self, request, venda):
 
@@ -79,8 +79,13 @@ class ItemDoPedidoView(View):
             venda_id=venda
         ).first()
     
-        if item:         
-            qnt = item.quantidade + float(request.POST['quantidade'])
+        if item:  
+            if request.POST['quantidade'] == '':
+                qnt = 1
+            else:
+                qnt = request.POST['quantidade']    
+
+            qnt = item.quantidade + float(qnt)
             # ItemDoPedido.objects.filter(
             #     id=item.id
             # ).update(quantidade=qnt) 
