@@ -3,6 +3,19 @@
 {% load widget_tweaks %}
 {% block content %}
 
+  <head>
+
+    <!-- calendar datetime-input widget-->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/bootstrap-datetimepicker/4.17.44/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/moment.js/2.17.1/moment.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap-datetimepicker/4.17.44/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- calendar datetime-input widget-->
+
+  </head>
+
 
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -42,5 +55,103 @@
       <a href="/accounts/" class="btn btn-default">Cancel</a>
     </div>
   </form>
+
+
+  <script>
+      $(function () {
+          $('.datetime-input').datetimepicker({
+              format:'YYYY-MM-DD',
+          })
+      });
+      
+      $(function () {
+  
+      // Oculta as opções do segundo select:
+      $("#t-shift option").hide();
+  
+      // Observa o evento change do primeiro select:
+      $("#p-shift").on("change", function () {
+  
+      // Recupera o valor selecionado:
+      let course = $("#p-shift").val();
+      
+      // Oculta as opções atuais:
+      $("#t-shift option").hide();
+      
+      // Exibe as opções conforme a seleção:
+      $("#t-shift option[data-course="+ course +"]").show();
+  
+      });
+  
+      });                          
+  
+  </script>
+  
+  </script>
+  
+  <!-- Consumir API dos VIACEP com Javascript https://viacep.com.br/exemplo/javascript/-->
+  <script type="text/javascript" >
+  
+    function limpa_formulário_cep() {
+            //Limpa valores do formulário de cep.
+            document.getElementById('cep').value=("");
+    }
+  
+    function meu_callback(conteudo) {
+        if (!("erro" in conteudo)) {
+            //Atualiza os campos com os valores.
+            document.getElementById('cep').value=(conteudo.logradouro +' - '+ conteudo.bairro +', Nº  ???' + ' , '+conteudo.localidade +' - '+  conteudo.uf);
+            
+  
+        } //end if.
+        else {
+            //CEP não Encontrado.
+            limpa_formulário_cep();
+            alert("CEP não encontrado.");
+        }
+    }
+        
+    function pesquisacep(valor) {
+  
+        //Nova variável "cep" somente com dígitos.
+        var cep = valor.replace(/\D/g, '');
+  
+        //Verifica se campo cep possui valor informado.
+        if (cep != "") {
+  
+            //Expressão regular para validar o CEP.
+            var validacep = /^[0-9]{8}$/;
+  
+            //Valida o formato do CEP.
+            if(validacep.test(cep)) {
+  
+                //Preenche os campos com "..." enquanto consulta webservice.
+                document.getElementById('cep').value="...";
+     
+  
+                //Cria um elemento javascript.
+                var script = document.createElement('script');
+  
+                //Sincroniza com o callback.
+                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+  
+                //Insere script no documento e carrega o conteúdo.
+                document.body.appendChild(script);
+  
+            } //end if.
+            else {
+                //cep é inválido.
+                // limpa_formulário_cep();
+                // alert("Formato de CEP inválido.");
+            }
+        } //end if.
+        else {
+            //cep sem valor, limpa formulário.
+            // limpa_formulário_cep();
+        }
+    };
+  
+    </script>
+    <!-- Consumir API dos VIACEP com Javascript -->
 
 {% endblock %}

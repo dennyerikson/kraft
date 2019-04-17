@@ -16,7 +16,7 @@
                   <th>Descricao</th>
                   <th>Valor</th>
                   <th>Estoque</th>
-                  <th class="t5">Mais</th>
+                  <th>Mais</th>
                 </tr>
               </thead>
 
@@ -38,7 +38,18 @@
                           data-whateverimagem="{{produto.foto.url}}"
                           data-whateverdetalhes="Nome: {{ produto.nome }}&#013;Código Produto: {{ produto.codigo_produto }}&#013;Código Barras: {{ produto.codigo_barras }}&#013;Descrição: {{ produto.descricao }}&#013;Valor: {{ produto.valor }}&#013;Marca: {{ produto.marca }}&#013;Estoque Atual: {{ produto.estoque_atual }}&#013;Estoque Minimo: {{ produto.estoque_minimo }}&#013;Observações: {{ produto.observacoes }}&#013;Data: {{ produto.create_data }}&#013;
                           "
-                          >+</a></td>
+                          ><i class="glyphicon glyphicon-plus"></i>
+                          </a>
+                          &#013; &#013;
+                          <a href="/{{produto.id}}/update/">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                          </a>
+                          &#013; &#013;
+                          <a href="/{{produto.id}}/delete/">
+                            <i class="glyphicon glyphicon-trash"></i>
+                          </a>
+                        
+                        </td>
                     </tr>
                     
                 {% endfor %}

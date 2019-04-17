@@ -156,7 +156,7 @@ class ProdutosUpdateView(UpdateView):
 
     def get_object(self):
         id_ = self.kwargs.get("id")
-        return get_object_or_404(Horario, id=id_)
+        return get_object_or_404(Produtos, id=id_)
 
     def form_valid(self, form):
         return super().form_valid(form)
@@ -173,7 +173,7 @@ class ProdutosDeleteView(DeleteView):
 
     def get_object(self):
         id_ = self.kwargs.get("id")
-        return get_object_or_404(Horario, id=id_)
+        return get_object_or_404(Produtos, id=id_)
     
     def get_success_url(self):
         return reverse('appkraft:appkraft-list')
