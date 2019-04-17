@@ -4,28 +4,17 @@
 {% block extra %}
 
 <form id="search_form" action="{% if venda_obj.id %}{% url 'item-do-pedido' venda_obj.id %}{%endif%}"  method="POST" class="form-inline">{% csrf_token %}
-        <div class="row"><!--linha 1/3-->
-            <div class="col-xs-12 text-center"><!--coluna 1/2-->
-                <!-- <input name="qnt" style="width: 35px;" id="qnt" type="text" placeholder="01"> 
-                <label style="font-size:17px" class="label label-default">X</label>
-                <input name="search" id="search" type="text" placeholder="Search Produto..."> -->
-               
-
-                
-                    {{ form_item }}
-                    <button onclick="Submits()">
-                        <span class="glyphicon glyphicon-search"></span>
-                    </button>
-               
-               
-                    
-                                                                 
-            </div>
-
-                 
-        </div>
-    </form>
-    <br>
+    <div class="row"><!--linha 1/3-->
+        <div class="col-xs-12 text-center"><!--coluna 1/2-->
+            <!-- <input name="qnt" style="width: 35px;" id="qnt" type="text" placeholder="01"> 
+            <label style="font-size:17px" class="label label-default">X</label>
+            <input name="search" id="search" type="text" placeholder="Search Produto..."> -->   
+            {{ form_item }}
+            <button onclick="Submits()"><span class="glyphicon glyphicon-search"></span></button>
+        </div>            
+    </div>
+</form>
+<br>
     <div class="row"><!--linha 2/3-->
         <div class="table-overflow col-xs-12 "><!--coluna unica-->                  
             <table class="listacaixa" border="0">
@@ -40,86 +29,25 @@
                     <th class="t1 linhafixa"></th>
                 </tr>
                 {% for item in itens %}
-                    <tr>                                    
-                        <td class="linhafixa">
-                            <a href="#" data-toggle="modal" data-target="#exampleModal" 
-                            data-whateverdetalhes="{{item.produto.nome}}"
-                            data-whateverimagem="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} ">
-                            <img src="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} " width="20">
-                            </a>
-                        </td>
+                <tr>                                    
+                    <td class="linhafixa">
+                        <a href="#" data-toggle="modal" data-target="#exampleModal" 
+                        data-whateverdetalhes="{{item.produto.nome}}"
+                        data-whateverimagem="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} ">
+                        <img src="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} " width="20">
+                        </a>
+                    </td>
                         <td class="linhafixa">{{item.produto.codigo_produto}}</td>
                         <td class="linhafixa">{{item.produto.nome}}</td>
                         <td class="linhafixa">{{item.quantidade}}</td>
                         <td class="linhafixa">{{item.produto.valor}}</td>
                         <th class="linhafixa">{{item.total_item}}</th>
                         <td class="linhafixa">
-                            <a id="delete-post-{{item.id}}" href="#" style="text-decoration:none; color: red">
-                                <i class="glyphicon glyphicon-trash"></i>
-                            </a>
-                        </td>
-                    </tr> 
-                    <tr>                                    
-                        <td class="linhafixa">
-                            <a href="#" data-toggle="modal" data-target="#exampleModal" 
-                            data-whateverdetalhes="{{item.produto.nome}}"
-                            data-whateverimagem="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} ">
-                            <img src="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} " width="20">
-                            </a>
-                        </td>
-                        <td class="linhafixa">{{item.produto.codigo_produto}}</td>
-                        <td class="linhafixa">{{item.produto.nome}}</td>
-                        <td class="linhafixa">{{item.quantidade}}</td>
-                        <td class="linhafixa">{{item.produto.valor}}</td>
-                        <th class="linhafixa">{{item.total_item}}</th>
-                        <td class="linhafixa">
-                            <a id="delete-post-{{item.id}}" href="#" style="text-decoration:none; color: red">
-                                <i class="glyphicon glyphicon-trash"></i>
-                            </a>
-                        </td>
-                    </tr>                                                                                                          
-
-                    <tr>                                    
-                        <td class="linhafixa">
-                            <a href="#" data-toggle="modal" data-target="#exampleModal" 
-                            data-whateverdetalhes="{{item.produto.nome}}"
-                            data-whateverimagem="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} ">
-                            <img src="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} " width="20">
-                            </a>
-                        </td>
-                        <td class="linhafixa">{{item.produto.codigo_produto}}</td>
-                        <td class="linhafixa">{{item.produto.nome}}</td>
-                        <td class="linhafixa">{{item.quantidade}}</td>
-                        <td class="linhafixa">{{item.produto.valor}}</td>
-                        <th class="linhafixa">{{item.total_item}}</th>
-                        <td class="linhafixa">
-                            <a id="delete-post-{{item.id}}" href="#" style="text-decoration:none; color: red">
-                                <i class="glyphicon glyphicon-trash"></i>
-                            </a>
-                        </td>
-                    </tr>                                                                                                          
-
-                    <tr>                                    
-                        <td class="linhafixa">
-                            <a href="#" data-toggle="modal" data-target="#exampleModal" 
-                            data-whateverdetalhes="{{item.produto.nome}}"
-                            data-whateverimagem="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} ">
-                            <img src="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} " width="20">
-                            </a>
-                        </td>
-                        <td class="linhafixa">{{item.produto.codigo_produto}}</td>
-                        <td class="linhafixa">{{item.produto.nome}}</td>
-                        <td class="linhafixa">{{item.quantidade}}</td>
-                        <td class="linhafixa">{{item.produto.valor}}</td>
-                        <th class="linhafixa">{{item.total_item}}</th>
-                        <td class="linhafixa">
-                            <a id="delete-post-{{item.id}}" href="#" style="text-decoration:none; color: red">
-                                <i class="glyphicon glyphicon-trash"></i>
-                            </a>
-                        </td>
-                    </tr>                                                                                                          
-
-
+                        <a id="delete-post-{{item.id}}" href="#" style="text-decoration:none; color: red">
+                        <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </td>
+                </tr> 
                 {% endfor %}
                 <tr>
                     <th class="colorback"></th>                           
