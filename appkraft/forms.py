@@ -5,15 +5,11 @@ class ProdutosModelForm(forms.ModelForm):
     class Meta:
         model = Produtos
         fields = [
-            'codigo_produto',
-            'codigo_barras',
             'nome',
-            'descricao',
             'empresa',
             'custo',
             'ganho',
             'valor',
-            'marca',
             'estoque_atual',
             'estoque_minimo',
             'observacoes',

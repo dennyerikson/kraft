@@ -107,7 +107,7 @@
         <!-- MODAL IMG -->
 
 
-    <div class="container">
+    <div class="container" style="background-color: #fff2bfff">
         <div class="row">
             <!--lado esquerdo do container-->   
             <div class="col-xs-4 text-center">    
@@ -131,7 +131,7 @@
                     <div class="col-xs-12 text-center"><!--coluna unica-->  
                         <br><br>
                         <img src="{{produtos.foto.url}}" class="img-responsive" width="30">                                                            
-                        <img src="{% static "img/logo/logo03.png" %}" width="320">
+                        <img src="{% static "img/logo/logo.png" %}" width="320">
                         <br><br>                             
                         <label style="font-size:20px" class="label label-default">{{produto.nome}}</label>
                         <label style="font-size:20px" class="label label-default">{{produto.valor}}</label>                                                               
@@ -179,7 +179,7 @@
                             <tr>                                    
                                 <td class="linhafixa"><a href="#" data-toggle="modal" data-target="#exampleModal" 
                                     data-whateverdetalhes="{{produto.nome}}"
-                                    data-whateverimagem="{% static "img/logo/logo03.png" %}"><img src="{% static "img/logo/logo03.png" %}" width="20"></a></td>
+                                    data-whateverimagem="{% static "img/logo/logo.png" %}"><img src="{% static "img/logo/logo03.png" %}" width="20"></a></td>
                                 <td class="linhafixa">{{produto.codigo_produto}}</td>
                                 <td class="linhafixa">{{produto.nome}}</td>
                                 <td class="linhafixa">{{produto.quantidade}}</td>

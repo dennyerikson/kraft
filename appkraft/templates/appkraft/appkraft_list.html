@@ -11,9 +11,9 @@
               <thead><!--cabeçalho-->
                 <tr>
                   <th class="t4">Foto</th>
+                  <th>ID</th>
                   <th>Produto</th>
-                  <th>Marca</th>
-                  <th>Descricao</th>
+                  <th>Observações</th>
                   <th>Valor</th>
                   <th>Estoque</th>
                   <th>Mais</th>
@@ -29,24 +29,24 @@
                         {% else %}
                           <td>----</td><!--coluna-->
                         {% endif %}
+                        <td><strong>{{ produto.pk }}</strong></td><!--coluna-->
                         <td>{{ produto.nome }}</td><!--coluna-->
-                        <td>{{ produto.marca }}</td><!--coluna-->
-                        <td>{{ produto.descricao }}</td><!--coluna-->
+                        <td>{{ produto.observacoes }}</td><!--coluna-->
                         <td>{{ produto.valor }}</td><!--coluna-->
                         <td>{{ produto.estoque_atual }}</td><!--coluna-->
                         <td><a href="#" data-toggle="modal" data-target="#exampleModal"
                           data-whateverimagem="{{produto.foto.url}}"
                           data-whateverdetalhes="Nome: {{ produto.nome }}&#013;Código Produto: {{ produto.codigo_produto }}&#013;Código Barras: {{ produto.codigo_barras }}&#013;Descrição: {{ produto.descricao }}&#013;Valor: {{ produto.valor }}&#013;Marca: {{ produto.marca }}&#013;Estoque Atual: {{ produto.estoque_atual }}&#013;Estoque Minimo: {{ produto.estoque_minimo }}&#013;Observações: {{ produto.observacoes }}&#013;Data: {{ produto.create_data }}&#013;
                           "
-                          ><i class="glyphicon glyphicon-plus"></i>
+                          ><i class="glyphicon glyphicon-plus primarycolor"></i>
                           </a>
                           &#013; &#013;
                           <a href="/{{produto.id}}/update/">
-                            <i class="glyphicon glyphicon-pencil"></i>
+                            <i class="glyphicon glyphicon-pencil primarycolor"></i>
                           </a>
                           &#013; &#013;
                           <a href="/{{produto.id}}/delete/">
-                            <i class="glyphicon glyphicon-trash"></i>
+                            <i class="glyphicon glyphicon-trash primarycolor"></i>
                           </a>
                         
                         </td>

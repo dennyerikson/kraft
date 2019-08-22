@@ -6,32 +6,34 @@ from django.db.models import Sum, F, FloatField, Q
 from .forms import ItemDoPedidoForm
 from django.http import HttpResponseRedirect, QueryDict
 from django.shortcuts import get_object_or_404
+from django.views.generic import (
+    ListView,
+)
 
 
 class CaixaView(View):
 
     def get(self, request):
-        return render(request, 'caixa/home.html')
+        data = {}
+        data['comandas'] = Venda.objects.filter(status=False).order_by("-pk")
+        return render(request, 'caixa/home.html', data)
 
     def post(self, request):
 
         data = {}
+        data['comandas'] = Venda.objects.filter(status=False).order_by("-pk")
         data['form_item'] = ItemDoPedidoForm()
         data['numero'] = request.POST['numero']
         data['desconto'] = float(request.POST['desconto'].replace(',','.'))
         # data['venda'] = request.POST['venda_id']
         data['venda'] = request.POST['venda_id']
 
-
-        if data['venda'] and data['desconto']<=0:
-            print('if')
-            venda = Venda.objects.get(id=int(data['venda'])) 
-
-        elif data['numero'] and data['desconto']>0:
-            print('elif 2')
-            venda = Venda.objects.get(Q(id=int(data['numero'])))
-            venda.desconto = data['desconto']
-            venda.save()      
+        venda = ''
+        if data['numero']:
+            data['venda'] = data['numero']
+            v = Venda.objects.get(id=int(data['venda']))
+            if v.status == False:
+                venda = v    
 
 
         else:
@@ -64,6 +66,7 @@ class CaixaView(View):
 
 
 class ItemDoPedidoView(View):
+
     def get(self, request, pk):
         return render(request, '/caixa/home.html')
 
@@ -71,6 +74,12 @@ class ItemDoPedidoView(View):
 
         data = {}
 
+        def checkqnt():
+            if request.POST['quantidade'] == '' or None:
+                qnt = 1
+            else:
+                qnt = request.POST['quantidade'] 
+            return float(qnt)
 
         # print()
 
@@ -79,13 +88,9 @@ class ItemDoPedidoView(View):
             venda_id=venda
         ).first()
     
-        if item:  
-            if request.POST['quantidade'] == '':
-                qnt = 1
-            else:
-                qnt = request.POST['quantidade']    
+        if item:    
 
-            qnt = item.quantidade + float(qnt)
+            qnt = item.quantidade + checkqnt()
             # ItemDoPedido.objects.filter(
             #     id=item.id
             # ).update(quantidade=qnt) 
@@ -100,7 +105,7 @@ class ItemDoPedidoView(View):
         else:
             item = ItemDoPedido.objects.create(
                 produto_id=request.POST['produto_id'],
-                quantidade=request.POST['quantidade'],
+                quantidade=checkqnt(),
                 # desconto=float(request.POST['desconto'].replace(',','.')),
                 venda_id=venda
             )
@@ -178,3 +183,37 @@ def delete_post(request):
     #         json.dumps({"nothing to see": "this isn't happening"}),
     #         content_type="application/json"
     #     )
+
+# finalizar com ajax
+def finalizar_venda(request):
+    if request.method == 'POST':
+        print(QueryDict(request.body).get('postpk'))
+
+        # post = Post.objects.get(
+        #     pk=int(QueryDict(request.body).get('postpk')))
+
+        venda = Venda.objects.get(id=int(QueryDict(request.body).get('postpk')))
+        venda_id = venda.id
+        venda.status = True
+        venda.save()
+
+        
+        return render(
+            request, 'caixa/home.html', {'venda_id':venda_id}
+            # request, 'caixa/home.html', data
+        )
+
+        # post.delete()
+
+
+
+class VendaListView(ListView):
+    template_name='dashboard/venda_list.html'
+    queryset=Venda.objects.all().order_by('-pk')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(VendaListView, self).get_context_data(*args, **kwargs)
+        context['fechadas'] = self.queryset.filter(status=True)
+        context['abertas'] = self.queryset.filter(status=False)
+        return context
+

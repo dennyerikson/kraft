@@ -13,6 +13,9 @@ class Venda(models.Model):
     desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     funcionario = models.ForeignKey(Pessoa, blank=True, null=True, on_delete=models.PROTECT)
     status = models.BooleanField(default=False)
+    create_date = models.DateField(
+        auto_now=True
+    )
 
 
     def calcular_total(self):

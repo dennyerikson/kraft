@@ -20,43 +20,45 @@
 </head>
 
 
+       <body style="background-color: #7d0706ff">
         <div class="login-page">
-                <div class="form">                  
-                    <form class="pure-form pure-form-aligned" method="POST">
-                            <div align="center">
-                                <img src="{% static "img/logo/logo03.png" %}" width="200">
-                            </div>
-
-                            <h2> Login </h2>
-                            {% csrf_token %}
-                            <fieldset>
-                                {{ form.non_field_errors }}
-                                
-                                {% for field in form %}
-                                    <div class="pure-control-group">
-                                        {{ field.label_tag }}
-                                        {{field}}
-                                        {{field.errors}}
-                                    </div>
-                                {% endfor %}
-
-                                <div class="pure-controls">
-                                    <button type="submit" class="pure-button pure-button-primary">Entrar</button>
-                                </div>
-
-                            </fieldset>
-                       
-                            </div>
+            <div class="form">                  
+                <form class="pure-form pure-form-aligned" method="POST">
+                        <div align="center">
+                            <img src="{% static "img/logo/logo.png" %}" width="200">
                         </div>
-                        
-                </form>
-                
-            </div>
-        </div>
 
-        <script>
-          $('.message a').click(function(){
-                $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-             });
-        </script>
+                        <h2> Login </h2>
+                        {% csrf_token %}
+                        <fieldset>
+                            {{ form.non_field_errors }}
+                            
+                            {% for field in form %}
+                                <div class="pure-control-group">
+                                    {{ field.label_tag }}
+                                    {{field}}
+                                    {{field.errors}}
+                                </div>
+                            {% endfor %}
+
+                            <div class="pure-controls">
+                                <button type="submit" class="pure-button pure-button-primary">Entrar</button>
+                            </div>
+
+                        </fieldset>
+                   
+                        </div>
+                    </div>
+                    
+            </form>
+            
+        </div>
+    </div>
+
+    <script>
+      $('.message a').click(function(){
+            $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+         });
+    </script>
+       </body>
 

@@ -1,5 +1,6 @@
 {% load static %}
 {% load staticfiles %}
+{% load widget_tweaks %}
 
 {% block extra %}
 
@@ -8,8 +9,21 @@
         <div class="col-xs-12 text-center"><!--coluna 1/2-->
             <!-- <input name="qnt" style="width: 35px;" id="qnt" type="text" placeholder="01"> 
             <label style="font-size:17px" class="label label-default">X</label>
-            <input name="search" id="search" type="text" placeholder="Search Produto..."> -->   
-            {{ form_item }}
+            <input name="search" id="search" type="text" placeholder="Search Produto..."> -->
+
+            {% for field in form_item.visible_fields %}
+                <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                
+                {{ field|add_class:'form-control' }}
+                
+                {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+                </div>
+            {% endfor %}
+                <!-- {{ form_item }} -->
+
             <button onclick="Submits()"><span class="glyphicon glyphicon-search"></span></button>
         </div>            
     </div>
@@ -33,17 +47,17 @@
                     <td class="linhafixa">
                         <a href="#" data-toggle="modal" data-target="#exampleModal" 
                         data-whateverdetalhes="{{item.produto.nome}}"
-                        data-whateverimagem="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} ">
-                        <img src="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo03.png" %} {%endif%} " width="20">
+                        data-whateverimagem="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo.png" %} {%endif%} ">
+                        <img src="{% if item.produto.foto %}{{item.produto.foto.url}}{%else%}{% static "img/logo/logo.png" %} {%endif%} " width="32">
                         </a>
                     </td>
                         <td class="linhafixa">{{item.produto.codigo_produto}}</td>
-                        <td class="linhafixa">{{item.produto.nome}}</td>
+                        <td class="linhafixa"><strong>{{item.produto.nome}}</strong></td>
                         <td class="linhafixa">{{item.quantidade}}</td>
                         <td class="linhafixa">{{item.produto.valor}}</td>
                         <th class="linhafixa">{{item.total_item}}</th>
                         <td class="linhafixa">
-                        <a id="delete-post-{{item.id}}" href="#" style="text-decoration:none; color: red">
+                        <a class="primarycolor" id="delete-post-{{item.id}}" href="#" style="text-decoration:none">
                         <i class="glyphicon glyphicon-trash"></i>
                         </a>
                     </td>
@@ -59,11 +73,6 @@
     <br>
 
     <script>
-
-        // function myFunction(){
-        //     alert('Ajax');
-        // }
-
         // Delete post on click
         $("#talk").on('click', 'a[id^=delete-post-]', function(){
             var post_primary_key = $(this).attr('id').split('-')[2];

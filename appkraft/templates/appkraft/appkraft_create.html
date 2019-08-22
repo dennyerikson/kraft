@@ -67,14 +67,14 @@
     valorGanho = parseFloat($('#id_ganho').val()); // percentual de ganho
 
     // formula tiver o custo e a porcentagem de ganho
-    if($('#id_ganho').on()){
-      $('#id_valor').val(parseFloat(((valorGanho * valorCusto)/100) + valorCusto).toFixed(2));
-    }
+    // if($('#id_ganho').on()){
+    //   $('#id_valor').val(parseFloat(((valorGanho * valorCusto)/100) + valorCusto).toFixed(2));
+    // }
 
     
-    // if($('#id_valor').focusin()){
-    //   $('#id_ganho').val(parseFloat(((valorPreco - valorCusto)/ valorCusto)*100).toFixed(2));
-    // }
+    if($('#id_valor').on()){
+      $('#id_ganho').val(parseFloat(((valorPreco - valorCusto)/ valorCusto)*100).toFixed(2));
+    }
 
     
   }

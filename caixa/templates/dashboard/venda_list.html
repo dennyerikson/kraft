@@ -1,0 +1,243 @@
+{% extends 'appkraft/base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    /* Float four columns side by side */
+    .column {
+      float: left;
+      width: 30%;
+      padding: 0 5px;
+    }
+    
+    .row {margin: 0 -5px;}
+    
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    
+    /* Responsive columns */
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 3px;
+      }
+    }
+    
+    /* Style the counter cards */
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      text-align: center;
+      background-color: #444;
+      color: white;
+    }
+    
+    .fa {font-size:30px;}
+    </style>
+    </head>
+
+    <div class="container">
+
+              <div class="row" style="margin-top:0.5%">
+              <div class="col-sm-6">
+                  <h2>Vendas</h2>
+                  <p>Digite algo no campo de entrada para procurar na , datas, id, status etc...</p>
+                  <input class="form-control" id="myInput" type="text" placeholder="Pesquisar...">
+                  
+              </div>
+              <div class="col-sm-6" style="text-align: right">
+                  <div class="body">
+                      <div class="row">
+                          <div class="column">
+                            <div class="card">
+                              <p><i class="fa fa-cart-plus"></i></p>
+                              <h3>{{object_list|length}}+</h3>
+                              <p>Vendas</p>
+                            </div>
+                          </div>
+                        
+                          <div class="column">
+                            <div class="card">
+                              <p><i class="fa fa-check"></i></p>
+                              <h3>{{fechadas|length}}+</h3>
+                              <p>Fechadas</p>
+                            </div>
+                          </div>
+                          
+                          <div class="column">
+                            <div class="card">
+                              <p><i class="fa fa-times"></i></p>
+                              <h3>{{abertas|length}}+</h3>
+                              <p>Abertas</p>
+                            </div>
+                          </div>
+                          
+                          
+                        </div>
+                  </div>
+
+              </div>
+              </div>
+            
+            <!-- <h2>Vendas</h2>
+            <p>Digite alguma coisa no campo de entrada para procurar na tabela nomes etc...:</p>  
+            <input class="form-control" id="myInput" type="text" placeholder="Search.."> -->
+            <br>
+            <table class="table table-bordered">
+              <thead><!--cabeçalho-->
+                <tr>
+                  <!-- <th class="t4">Foto</th> -->
+                  <th>ID</th>
+                  <th>Valor</th>
+                  <th>Data</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="myTable"><!--corpo_tabela-->
+               
+                {% for venda in object_list %}
+                    <tr><!--linha-->
+                        <td><strong>{{ venda.pk }}</strong></td><!--coluna-->
+                        <td> <strong class="primarycolor">{{ venda.valor }}</strong></td><!--coluna-->
+                        <td><strong>{{ venda.create_date|date:'d/m/Y'}}</strong></td><!--coluna-->
+                        <td><strong class="primarycolor">{{ venda.status|yesno:'Fechado, Aberto' }}</strong> 
+                          {% if venda.status %}
+                            &nbsp;&nbsp;<i class="glyphicon glyphicon-ok-sign primarycolor"></i>
+                          {%else%}
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-remove-sign primarycolor"></i>
+                          {%endif%}
+                        </td><!--coluna-->
+                       
+                        <!-- <td>
+                          <a href="#" data-toggle="modal" data-target="#exampleModal"
+                          data-whateverimagem="{{produto.foto.url}}"
+                          data-whateverdetalhes="Nome: {{ produto.nome }}&#013;Código Produto: {{ produto.codigo_produto }}&#013;Código Barras: {{ produto.codigo_barras }}&#013;Descrição: {{ produto.descricao }}&#013;Valor: {{ produto.valor }}&#013;Marca: {{ produto.marca }}&#013;Estoque Atual: {{ produto.estoque_atual }}&#013;Estoque Minimo: {{ produto.estoque_minimo }}&#013;Observações: {{ produto.observacoes }}&#013;Data: {{ produto.create_data }}&#013;
+                          "
+                          ><i class="glyphicon glyphicon-plus primarycolor"></i>
+                          </a>
+                          &#013; &#013;
+                          <a href="/{{produto.id}}/update/">
+                            <i class="glyphicon glyphicon-pencil primarycolor"></i>
+                          </a>
+                          &#013; &#013;
+                          <a href="/{{produto.id}}/delete/">
+                            <i class="glyphicon glyphicon-trash primarycolor"></i>
+                          </a>
+                        
+                        </td> -->
+                    </tr>
+                    
+                {% endfor %}
+               
+              </tbody>
+            </table>
+            
+            
+        </div>
+
+      <!-- MODAL DADOS -->
+      <style>
+        #detalhes{
+          border: 0px solid white;
+          width:100%;
+          height:300px;
+          font-size: 18px;
+          }
+      </style>
+      <div class="container">
+          <div class="modal fade" id="exampleModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title"><i class="glyphicon glyphicon-info-sign"></i> Informações do Produto</h4>              
+  
+                </div>
+                <div class="modal-body">
+                  <img id="imagens" name="imagens" src="" alt="" width="70">
+                  <textarea name="detalhes" class="form-control" id="detalhes"></textarea>
+                </div>
+  
+                <div class="modal-footer">
+                  <button type="button" class="btn" data-dismiss="modal"><i class="glyphicon glyphicon-ok"></i> Ok, entendi</button>
+  
+                </div>
+  
+              </div>
+  
+            </div>
+  
+          </div>
+  
+        </div>
+        <script type="text/javascript">
+          $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipientdetalhes = button.data('whateverdetalhes')
+            var recipientimagem = button.data('whateverimagem')
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('#detalhes').val(recipientdetalhes)
+            modal.find('#imagens').attr("src", button.data('whateverimagem'))
+          })
+        </script>
+      <!-- MODAL DADOS -->
+
+
+      <!-- MODAL CADASTRO -->
+      <div class="container">
+          <div class="modal fade" id="cadastroModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title"><i class="glyphicon glyphicon-plus"></i> Cadastrar Produto</h4>              
+  
+                </div>
+
+                <div class="modal-body" name="modal-body" id="modal-body">
+                    <form method="POST" class="post-form">
+
+                    </form>
+                </div>
+
+              </div>
+  
+            </div>
+  
+          </div>
+  
+        </div>
+         <!-- MODAL CADASTRO -->
+
+          
+          <script>
+          $(document).ready(function(){
+            $("#myInput").on("keyup", function() {
+              var value = $(this).val().toLowerCase();
+              $("#myTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              });
+            });
+          });
+          </script>
+
+{% endblock %}

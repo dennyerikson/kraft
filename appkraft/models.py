@@ -6,12 +6,8 @@ from accounts.models import Pessoa
 
 # Create your models here.
 class Produtos(models.Model):
-    codigo_produto = models.IntegerField(unique=True)
-    codigo_barras = models.IntegerField(unique=True)
     nome = models.CharField(max_length=150)
-    descricao = models.CharField(max_length=150)
     valor = models.DecimalField(max_digits=5, decimal_places=2)
-    marca = models.CharField(max_length=150)
     estoque_atual = models.IntegerField()
     estoque_minimo = models.IntegerField()
     observacoes = models.TextField(max_length=255, null=True, blank=True)
