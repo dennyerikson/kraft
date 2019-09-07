@@ -7,6 +7,50 @@
 
 <!-- MODAIS INICIO-->
 
+ <!-- Modal mesa-->
+ <div class="modal fade" id="mesaModal" role="dialog">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title text-center">Select Mesa</h4>
+                </div>
+
+                <div class="modal-body">
+                    <h2>Selecione a mesa para venda 
+                        <label  id="idmesa" style="font-size:20px" class="label label-default rotulos"></label>
+                    </h2>
+                    <h3>
+                        <label for="selectmesa">Mesas: </label>
+                        
+                        <select name="selectmesa" id="selectmesa" required>
+                                <option>-----</option>
+                                {% for mesa in mesas %}
+                                    <option value="{{mesa.pk}}">{{mesa.mesa}}</option>
+                                {% empty %}
+                                <option value="{{mesa.pk}}">Desculpe, mesas indisponiveis!</option>
+                                
+                                {% endfor %}
+                            </select>
+                    </h3>
+                    <!-- for de mesas vazias -->
+                    <!-- for de mesas vazias -->                   
+
+                </div>
+                
+                
+                <div class="modal-footer"> <!-- colocar id da venda -->
+                    <button class="btn btn-success" id="btnmesa" data-dismiss="modal">
+                            Salvar <i class="glyphicon glyphicon-ok"></i>
+                    </button>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal mesa-->
+
  <!-- Modal FINALIZAR-->
  <div class="modal fade" id="finalVendaModal" role="dialog">
     <div class="modal-dialog ">
@@ -299,7 +343,17 @@
                                 {% for comanda in comandas %}
                                     <li  href="#" class="list-group-item">        
                                             <div id="comanda" class="chip">
-                                                <img src="{% static "/img/img_avatar.png" %}" alt="Person" width="26" height="26">
+                                                <a href="#" data-toggle="modal" data-target="#mesaModal" 
+                                                    data-pk="{{comanda.pk}}">
+                                                        <h2><span class="blue">
+                                                                {% if comanda.mesa %}
+                                                                    {{comanda.mesa}}
+                                                                {%else%}
+                                                                    +
+                                                                {%endif%}
+                                                            </span></h2>
+                                                </a>
+                                                <!-- <img src="{% static "/img/img_avatar.png" %}" alt="Person" width="26" height="26"> -->
                                                 <!-- {{item.user}}  -->
         
                                                 {%if comanda.pk%}
@@ -307,7 +361,7 @@
                                                         {{comanda.pk}}
                                                     </span>&nbsp
                                                     <span class="label label-default rotulos" style="font-size: 14px">
-                                                        {{comanda.valor}}
+                                                        R$ {{comanda.valor}}
                                                     </span>&nbsp &nbsp &nbsp &nbsp &nbsp 
                                                     <a class="primarycolor" style="font-size: 16px" id="{{comanda.pk}}" href="#" style="text-decoration:none">
                                                         <i class="glyphicon glyphicon-edit"></i>
@@ -361,6 +415,7 @@
                 <a href="/caixa/" class="btn btn-default" style="font-size:18px" type="button" >Limpar</a>         
             </div>                          
         </div> 
+
         <!--rodapé do container-->  
 
         
@@ -368,206 +423,6 @@
 
 <!-- LAYOUT FIM-->    
 
-
-
-
-<!-- SCRIPT INICIO-->
-<script>
-$(document).ready(function(){
-    var id = $("#numero").val();
-    
-    if(id == ""){
-        // alert(id);
-        $("#btnfinalizar").prop("disabled", true);
-    }
-});
-</script>
-
-<!-- SCRIPT MODAL FinalVenda -->
-<script type="text/javascript">
-    $('#finalVendaModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var valor = button.data('valor')
-    var pk = button.data('pk')
-    document.getElementById("finalizar-").id = "finalizar-" + pk;
-    document.getElementById("totallabel").innerHTML = valor;
-    $('#total').val(valor);
-    $('#dinheiro').val("");
-    $('#cartao').val("");
-    $('#credito').val("");
-    var modal = $(this)
-    // modal.find('#total').attr("value", valor)
-    })
-</script>
-<!-- SCRIPT MODAL FinalVenda -->
-
-<!-- SCRIPT MODAL IMG -->
-<script type="text/javascript">
-    $('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var recipientdetalhes = button.data('whateverdetalhes')
-    var recipientimagem = button.data('whateverimagem')
-    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    document.getElementById("name").innerHTML = recipientdetalhes;
-    var modal = $(this)
-    modal.find('#imagens').attr("src", button.data('whateverimagem'))
-    })
-</script>
-<!-- SCRIPT MODAL IMG -->
-
-<!-- SCRIPT MODAL CLIENTE -->
-<script>                                                
-    $("#btaddcliente").on('click', function () {
-    $('#addcliente').modal('show');              
-    });                  
-</script>
-<!-- SCRIPT MODAL CLIENTE -->
-
-<!-- SCRIPT TABELA VENDAS -->
-<script>
-function Submits(){
-    var search_form = document.getElementById("search_form");
-    var venda_form = document.getElementById("venda_form");
-    setTimeout(function(){
-        venda_form.submit();
-    }, 50);  
-    search_form.submit();
-}
-</script>
-<!-- SCRIPT TABELA VENDAS -->
-
-<script>
-    $(document).ready(function() {
-        $("#comanda a").click(function() {
-            //Do stuff when clicked
-            var primary_key = $(this).attr('id')
-            // alert(primary_key)
-            if(primary_key.includes('finalizar')){
-                alert(primary_key.split('-')[1])
-                
-                $('#comanda').on('show.bs.modal', function (event) {
-                    // var button = $(event.relatedTarget) // Button that triggered the modal
-                    // var recipientid = button.data('whateverid')
-                    // var recipientnome = button.data('whatevernome')
-                    // // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                    // // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-                    // document.getElementById("id").innerHTML = recipientid;
-                    // document.getElementById("nome").innerHTML = recipientnome; 
-                    // document.getElementById("id_").setAttribute("value", recipientid); 
-                
-                    var modal = $(this)
-
-                                    
-                    
-                })
-
-            }
-            else{
-                $('#numero').val(primary_key)
-                Submits();
-            }
-        });
-    });
-</script>
-
-<script>
-
-       $(document).ready(function(){
-
-            $("#dinheiro").on('blur', function() {
-                calcular("#dinheiro", "#cartao", "#credito", "#total", "troco","pago");
-            });
-
-            $("#cartao").on('blur', function() {
-                calcular("#dinheiro", "#cartao", "#credito", "#total", "troco","pago");
-            });  
-
-            $("#credito").on('blur', function() {
-                calcular("#dinheiro", "#cartao", "#credito", "#total", "troco","pago");
-            });    
-
-            $("#dinheiro_").on('blur', function() {
-                calcular("#dinheiro_", "#cartao_", "#credito_", "#total_", "troco_","pago_");
-            });
-
-            $("#cartao_").on('blur', function() {
-                calcular("#dinheiro_", "#cartao_", "#credito_", "#total_", "troco_","pago_");
-            });  
-
-            $("#credito_").on('blur', function() {
-                calcular("#dinheiro_", "#cartao_", "#credito_", "#total_", "troco_","pago_");
-            });        
-
-        });
-
-       function calcular(dinheiro, cartao, credito, total, troco, pago){
-            // var elvisLives = Math.PI > 4 ? "Yep" : "Nope";
-           valorDinheiro = parseFloat($(dinheiro).val().replace(",", ".")); 
-           valorCartao = parseFloat($(cartao).val() ? $(cartao).val().replace(",", "."):0); 
-           valorCredito = parseFloat($(credito).val() ? $(credito).val().replace(",", "."):0); 
-           valorTotal = parseFloat($(total).val().replace(",", "."));
-           valorTroco = parseFloat(((valorDinheiro + valorCartao + valorCredito) - valorTotal)).toFixed(2).replace(".", ",");
-           valorPago = parseFloat(((valorDinheiro + valorCartao + valorCredito))).toFixed(2).replace(".", ",");
-           
-            // alert(valorTroco);                                                                                                                                               
-            document.getElementById(troco).innerHTML = valorTroco;
-            document.getElementById(pago).innerHTML = valorPago;
-            // $('#troco').val(valorTroco);
-                
-       }
-
-
-
-       // Finalizar on click
-       $("#finalizar").on('click', 'a[id^=finalizar-]', function(){
-            var post_primary_key = $(this).attr('id').split('-')[1];
-            var id = $(this).attr('data-url');
-            // alert(post_primary_key); // sanity check
-            finaliza_venda(post_primary_key);
-        });
-
-        $("#finalVendaModal").on('click', 'a[id^=finalizar-]', function(){
-            var post_primary_key = $(this).attr('id').split('-')[1];
-            var id = $(this).attr('data-url');
-            // alert(post_primary_key); // sanity check
-            finaliza_venda(post_primary_key);
-        });
-            
-       function finaliza_venda(post_primary_key){
-
-           if (confirm('Deseja finalizar essa venda?')==true){
-               $.ajax({
-                   url : "finalizar_venda/", // the endpoint
-                   type : "POST", // http method
-                   data : { postpk : post_primary_key }, // data sent with the delete request
-                   beforeSend: function (xhr) {
-                       xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                   },
-                   success : function(json) {
-                       // hide the post
-                   $('#post-'+post_primary_key).hide(); // hide the post on success
-                //    alert("Venda finalizada!");
-                    window.location.replace("/caixa/");
-                   },
-
-                   error : function(xhr,errmsg,err) {
-                       // Show an error
-                       $('#results').html("<div class='alert-box alert radius' data-alert>"+
-                       "Oops! We have encountered an error. <a href='#' class='close'>&times;</a></div>"); // add error to the dom
-                       alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                   }
-               });
-           } else {
-               return false;
-           }
-       };
-       // Finalizar on click
-   </script>
-
-<!-- SCRIPT FIM-->
-
-
-
+<script src="{% static 'JS/jquerycx.js' %}"></script>
 
 {% endblock %}

@@ -17,6 +17,11 @@ class ProdutosModelForm(forms.ModelForm):
         ]
 
         widgets={
-            'observacoes':forms.Textarea(attrs={'placeholder':'Até 255 caracteres..','rows':3}),
+            'observacoes':forms.Textarea(attrs={
+                'placeholder':'Aqui é a descrição do seu produto, destalhes, sabores, marcas e etc...'
+                    +'Até 255 caracteres..', 'rows':2}),
             'nome':forms.TextInput(attrs={'placeholder':'Nome Produto'}),
+            'custo':forms.TextInput(attrs={'placeholder':'Valor gasto em R$'}),
+            'ganho':forms.TextInput(attrs={'placeholder':'Ganho em %', 'disabled':'true'}),
+            'valor':forms.TextInput(attrs={'placeholder':'Valor pretendido R$'}),
         }

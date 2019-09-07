@@ -16,4 +16,5 @@ urlpatterns = [
     path('delete_post/', views.delete_post, name="delete_post"),
     path('finalizar_venda/', views.finalizar_venda, name="finalizar_venda"),
     path('venda_list/', VendaListView.as_view(), name='venda-list'),
+    path('setarmesa/', views.set_mesa, name='setar_mesa'),
 ]

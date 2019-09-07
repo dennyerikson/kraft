@@ -1,5 +1,5 @@
 {% extends 'appkraft/base.html'%}
-
+{% load static %}
 {% load widget_tweaks %}
 {% block content %}
 
@@ -44,40 +44,8 @@
   </form>
 
 
-  <script>
-  // calcular porcentagem por ganho e preencher fields
-  // get custo = name:custo, id:id_custo
-  $('#id_custo').on('input', function(){
-      calcular();
-  });
-  //get ganho = name:ganho, id:id_ganho
-  $('#id_ganho').on('input', function(){
-      calcular();
-  });
-  //get valor = name:valor, id:id_valor
-  $('#id_valor').on('input', function(){
-      calcular();
-      // $('#id_ganho').attr('disabled','disabled');
-  });
+  <script src="{% static 'JS/jquerypro.js' %}">
 
-  function calcular(){
-
-  	valorCusto = parseFloat($('#id_custo').val()); // valor de custo
-    valorPreco = parseFloat($('#id_valor').val()); // valor de preço
-    valorGanho = parseFloat($('#id_ganho').val()); // percentual de ganho
-
-    // formula tiver o custo e a porcentagem de ganho
-    // if($('#id_ganho').on()){
-    //   $('#id_valor').val(parseFloat(((valorGanho * valorCusto)/100) + valorCusto).toFixed(2));
-    // }
-
-    
-    if($('#id_valor').on()){
-      $('#id_ganho').val(parseFloat(((valorPreco - valorCusto)/ valorCusto)*100).toFixed(2));
-    }
-
-    
-  }
   
   </script>
 

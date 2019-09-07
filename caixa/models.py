@@ -5,6 +5,23 @@ from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 from django.db.models import Sum, F, FloatField
 
+class Mesa(models.Model):
+    mesa = models.IntegerField()
+    status = models.BooleanField(default=False)
+    observacao = models.TextField(max_length=190)
+
+    def __str__(self):
+        return str(self.mesa)
+
+
+class Table(models.Model):
+    mesa = models.IntegerField()
+    status = models.BooleanField(default=False)
+    observacao = models.TextField(max_length=190)
+
+    def __str__(self):
+        return str(self.mesa)
+
 
 # Create your models here.
 class Venda(models.Model):
@@ -16,6 +33,7 @@ class Venda(models.Model):
     create_date = models.DateField(
         auto_now=True
     )
+    mesa = models.ForeignKey(Table, blank=True, null=True, on_delete=models.CASCADE)
 
 
     def calcular_total(self):

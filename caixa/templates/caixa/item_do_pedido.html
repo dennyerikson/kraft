@@ -2,6 +2,14 @@
 {% load staticfiles %}
 {% load widget_tweaks %}
 
+<head>
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+</head>
+
 {% block extra %}
 
 <form id="search_form" action="{% if venda_obj.id %}{% url 'item-do-pedido' venda_obj.id %}{%endif%}"  method="POST" class="form-inline">{% csrf_token %}
@@ -72,55 +80,6 @@
     </div>
     <br>
 
-    <script>
-        // Delete post on click
-        $("#talk").on('click', 'a[id^=delete-post-]', function(){
-            var post_primary_key = $(this).attr('id').split('-')[2];
-            var id = $(this).attr('data-url');
-            // alert(id); // sanity check
-            delete_post(post_primary_key);
-        });
-            
-        // $("#talk").prepend("<li><strong>"+json.text+"</strong> - <em> "+json.author+"</em> - <span> "+json.created+
-        //     "</span> - <a id='delete-post-"+json.postpk+"'>delete me</a></li>"
-        // );  
-
-        function delete_post(post_primary_key){
-
-            // if (post_primary_key == 0){
-            //     post_primary_key = 97
-            // }
-
-            if (confirm('are you sure you want to remove this post?')==true){
-                $.ajax({
-                    url : "delete_post/", // the endpoint
-                    type : "DELETE", // http method
-                    data : { postpk : post_primary_key }, // data sent with the delete request
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                    },
-                    success : function(json) {
-                        // hide the post
-                    $('#post-'+post_primary_key).hide(); // hide the post on success
-                    alert("post deletion successful");
-                    document.getElementById("venda_form").submit()
-                    },
-
-                    error : function(xhr,errmsg,err) {
-                        // Show an error
-                        $('#results').html("<div class='alert-box alert radius' data-alert>"+
-                        "Oops! We have encountered an error. <a href='#' class='close'>&times;</a></div>"); // add error to the dom
-                        alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                    }
-                });
-            } else {
-                return false;
-            }
-        };
-    
-    </script>
-
-
     <!-- modal delete -->
     <div class="container">
             <div class="modal fade" id="deleteModal" role="dialog">
@@ -146,33 +105,66 @@
                 </div>      
             </div>      
         </div>
+
+
+
         <script type="text/javascript">
+
+            // Delete post on click
+            $("#talk").on('click', 'a[id^=delete-post-]', function(){
+                var post_primary_key = $(this).attr('id').split('-')[2];
+                var id = $(this).attr('data-url');
+                // alert(id); // sanity check
+                delete_post(post_primary_key);
+            });
+
+                
+            function delete_post(post_primary_key){
+                if (confirm('are you sure you want to remove this post?')==true){
+                    $.ajax({
+                        url : "delete_post/", // the endpoint
+                        type : "DELETE", // http method
+                        data : { postpk : post_primary_key }, // data sent with the delete request
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        success : function(json) {
+                            // hide the post
+                        $('#post-'+post_primary_key).hide(); // hide the post on success
+                            alert("post deletion successful");
+                        // document.getElementById("venda_form").submit();
+                            window.location.reload(true);
+                        },
+
+                        error : function(xhr,errmsg,err) {
+                            // Show an error
+                            $('#results').html("<div class='alert-box alert radius' data-alert>"+
+                            "Oops! We have encountered an error. <a href='#' class='close'>&times;</a></div>"); // add error to the dom
+                            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                        }
+                    });
+                } else {
+                    return false;
+                }
+            };
+
+
             $('#deleteModal').on('show.bs.modal', function (event) {
-              var button = $(event.relatedTarget) // Button that triggered the modal
-              var recipientid = button.data('whateverid')
-              var recipientnome = button.data('whatevernome')
-              // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-              document.getElementById("id").innerHTML = recipientid;
-              document.getElementById("nome").innerHTML = recipientnome; 
-              document.getElementById("id_").setAttribute("value", recipientid); 
-           
-              var modal = $(this) 
-
-                // var div1 = document.getElementById("form_").getAttribute("action");           
-
-                //                 alert(div1);
-
-                              
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipientid = button.data('whateverid')
+                var recipientnome = button.data('whatevernome')
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                document.getElementById("id").innerHTML = recipientid;
+                document.getElementById("nome").innerHTML = recipientnome; 
+                document.getElementById("id_").setAttribute("value", recipientid); 
             
-            })
+                var modal = $(this);
 
-
-          </script>
-
-        <script>
-        document.getElementById("").submit();
+            });            
         </script>
+
+
     <!-- modal delete -->
 
 {% endblock %}

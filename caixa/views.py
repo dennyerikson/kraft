@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Venda, ItemDoPedido
+from .models import Venda, ItemDoPedido, Table
 from django.views import View
 from appkraft.models import Produtos
 from django.db.models import Sum, F, FloatField, Q
@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import (
     ListView,
 )
+from django.views.decorators.csrf import csrf_exempt
 
 
 class CaixaView(View):
@@ -16,6 +17,7 @@ class CaixaView(View):
     def get(self, request):
         data = {}
         data['comandas'] = Venda.objects.filter(status=False).order_by("-pk")
+        data['mesas'] = Table.objects.filter(status=False)
         return render(request, 'caixa/home.html', data)
 
     def post(self, request):
@@ -27,11 +29,12 @@ class CaixaView(View):
         data['desconto'] = float(request.POST['desconto'].replace(',','.'))
         # data['venda'] = request.POST['venda_id']
         data['venda'] = request.POST['venda_id']
+        data['mesas'] = Table.objects.filter(status=False)
 
         venda = ''
         if data['numero']:
             data['venda'] = data['numero']
-            v = Venda.objects.get(id=int(data['venda']))
+            v = get_object_or_404(Venda, pk=int(data['venda']))
             if v.status == False:
                 venda = v    
 
@@ -185,6 +188,8 @@ def delete_post(request):
     #     )
 
 # finalizar com ajax
+
+@csrf_exempt
 def finalizar_venda(request):
     if request.method == 'POST':
         print(QueryDict(request.body).get('postpk'))
@@ -193,6 +198,12 @@ def finalizar_venda(request):
         #     pk=int(QueryDict(request.body).get('postpk')))
 
         venda = Venda.objects.get(id=int(QueryDict(request.body).get('postpk')))
+
+        if venda.mesa:
+            m = Table.objects.get(pk=venda.mesa_id)
+            m.status = False
+            m.save()
+
         venda_id = venda.id
         venda.status = True
         venda.save()
@@ -216,4 +227,34 @@ class VendaListView(ListView):
         context['fechadas'] = self.queryset.filter(status=True)
         context['abertas'] = self.queryset.filter(status=False)
         return context
+
+
+from django.shortcuts import get_object_or_404
+@csrf_exempt
+def set_mesa(request):
+    if request.method == 'POST':
+        postmesa =int(QueryDict(request.body).get('postmesa'))
+
+        # print("mesa postmesa: ", postmesa)
+
+        venda = Venda.objects.get(pk=int(QueryDict(request.body).get('postpk')))
+
+        if venda.mesa:
+            if postmesa != venda.mesa_id:
+                t = Table.objects.get(pk=venda.mesa_id)
+                t.status = False
+                t.save()
+        
+        t = Table.objects.get(pk=postmesa)
+        t.status = True
+        t.save()
+
+        venda_id = venda.id
+        venda.mesa_id = postmesa
+        venda.save()
+
+        
+        return render(
+            request, 'caixa/home.html', {'venda_id':venda_id}
+        )
 

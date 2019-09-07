@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Venda, ItemDoPedido
+from .models import Venda, ItemDoPedido, Table
 
 class ItemDoPedidoInline(admin.TabularInline):
     model = ItemDoPedido
@@ -14,3 +14,4 @@ class VendaAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Venda, VendaAdmin)
 admin.site.register(ItemDoPedido)
+admin.site.register(Table)
